@@ -83,12 +83,31 @@ progeny = function(expr, scale=TRUE, organism="Human", top = 100, perm = 1,
 }
 
 #' @export
-progeny.ExpressionSet = function(expr, scale=TRUE, organism="Human", top = 100,
-    perm = 1, verbose = FALSE, z_scores = FALSE, get_nulldist = FALSE, ...) {
-    
-    progeny(Biobase::exprs(expr), scale=scale, organism=organism, top=top, 
-        perm = perm, verbose = verbose,  z_scores = z_scores, 
-        get_nulldist = get_nulldist)
+progeny.SingleCellExperiment =  function(expr, scale=FALSE, organism="Human", 
+                                         top = 100, perm = 1, verbose = FALSE, z_scores = FALSE, 
+                                         assay_name = "logcounts", get_nulldist = FALSE, ...) {
+  
+  requireNamespace("SingleCellExperiment")
+  
+  mat <- as.matrix(assay(input, assay_name))
+  
+  progeny(mat, scale=scale, 
+          organism=organism, top=top, perm = perm, verbose = verbose,  
+          z_scores = z_scores, get_nulldist = get_nulldist)
+}
+
+#' @export
+progeny.SpatialExperiment =  function(expr, scale=FALSE, organism="Human", 
+                                         top = 100, perm = 1, verbose = FALSE, z_scores = FALSE, 
+                                         assay_name = "logcounts", get_nulldist = FALSE, ...) {
+  
+  requireNamespace("SpatialExperiment")
+  
+  mat <- as.matrix(assay(input, assay_name))
+  
+  progeny(mat, scale=scale, 
+          organism=organism, top=top, perm = perm, verbose = verbose,  
+          z_scores = z_scores, get_nulldist = get_nulldist)
 }
 
 #' @export
