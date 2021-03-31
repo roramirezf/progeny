@@ -83,31 +83,66 @@ progeny = function(expr, scale=TRUE, organism="Human", top = 100, perm = 1,
 }
 
 #' @export
-progeny.SingleCellExperiment =  function(expr, scale=FALSE, organism="Human", 
-                                         top = 100, perm = 1, verbose = FALSE, z_scores = FALSE, 
+progeny.SingleCellExperiment = function(expr, scale= FALSE, organism="Human", 
+                                         top = 100, perm = 1, verbose = FALSE, 
+                                         z_scores = FALSE, return_assay = FALSE,
                                          assay_name = "logcounts", get_nulldist = FALSE, ...) {
   
   requireNamespace("SingleCellExperiment")
   
   mat <- as.matrix(assay(input, assay_name))
   
-  progeny(mat, scale=scale, 
-          organism=organism, top=top, perm = perm, verbose = verbose,  
-          z_scores = z_scores, get_nulldist = get_nulldist)
+  path_acts <- progeny(mat, scale=scale,
+                       organism=organism, top=top, perm = perm, verbose = verbose,
+                       z_scores = z_scores, get_nulldist = get_nulldist)
+  
+  if (return_assay) {
+    
+    # include TF activities into SingleCellExperiment object
+    progeny_se <- SummarizedExperiment::SummarizedExperiment(path_acts)
+    SummarizedExperiment::assayNames(progeny_se) <- "progeny"
+    SingleCellExperiment::altExp(expr, "progeny") <- progeny_se
+    
+    return(expr)
+    
+    
+  } else {
+    
+    return(path_acts)
+    
+  }
+  
 }
 
 #' @export
-progeny.SpatialExperiment =  function(expr, scale=FALSE, organism="Human", 
-                                         top = 100, perm = 1, verbose = FALSE, z_scores = FALSE, 
-                                         assay_name = "logcounts", get_nulldist = FALSE, ...) {
+progeny.SpatialExperiment = function(expr, scale=FALSE, organism="Human", 
+                                      top = 100, perm = 1, verbose = FALSE,
+                                      z_scores = FALSE, return_assay = FALSE,
+                                      assay_name = "logcounts", get_nulldist = FALSE, ...) {
   
   requireNamespace("SpatialExperiment")
   
   mat <- as.matrix(assay(input, assay_name))
   
-  progeny(mat, scale=scale, 
-          organism=organism, top=top, perm = perm, verbose = verbose,  
-          z_scores = z_scores, get_nulldist = get_nulldist)
+  path_acts <- progeny(mat, scale=scale,
+                       organism=organism, top=top, perm = perm, verbose = verbose,
+                       z_scores = z_scores, get_nulldist = get_nulldist)
+  
+  if (return_assay) {
+    
+    # include TF activities into SingleCellExperiment object
+    progeny_se <- SummarizedExperiment::SummarizedExperiment(path_acts)
+    SummarizedExperiment::assayNames(progeny_se) <- "progeny"
+    SingleCellExperiment::altExp(expr, "progeny") <- progeny_se
+    
+    return(expr)
+    
+    
+  } else {
+    
+    return(path_acts)
+    
+  }
 }
 
 #' @export
@@ -142,18 +177,6 @@ progeny.Seurat = function(expr, scale=TRUE, organism="Human", top = 100,
         return(results)
     }
     
-}
-
-#' @export
-progeny.SingleCellExperiment =  function(expr, scale=FALSE, organism="Human", 
-    top = 100, perm = 1, verbose = FALSE, z_scores = FALSE, 
-    get_nulldist = FALSE, ...) {
-    
-    requireNamespace("SingleCellExperiment")
-
-    progeny(as.matrix(SingleCellExperiment::normcounts(expr)), scale=scale, 
-        organism=organism, top=top, perm = perm, verbose = verbose,  
-        z_scores = z_scores, get_nulldist = get_nulldist)
 }
 
 #' @export
