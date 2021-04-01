@@ -99,7 +99,7 @@ progeny.SingleCellExperiment = function(expr, scale= FALSE, organism="Human",
   if (return_assay) {
     
     # include TF activities into SingleCellExperiment object
-    progeny_se <- SummarizedExperiment::SummarizedExperiment(path_acts)
+    progeny_se <- SummarizedExperiment::SummarizedExperiment(t(path_acts))
     SummarizedExperiment::assayNames(progeny_se) <- "progeny"
     SingleCellExperiment::altExp(expr, "progeny") <- progeny_se
     
@@ -131,7 +131,7 @@ progeny.SpatialExperiment = function(expr, scale=FALSE, organism="Human",
   if (return_assay) {
     
     # include TF activities into SingleCellExperiment object
-    progeny_se <- SummarizedExperiment::SummarizedExperiment(path_acts)
+    progeny_se <- SummarizedExperiment::SummarizedExperiment(t(path_acts))
     SummarizedExperiment::assayNames(progeny_se) <- "progeny"
     SingleCellExperiment::altExp(expr, "progeny") <- progeny_se
     
