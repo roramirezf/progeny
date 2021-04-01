@@ -90,7 +90,7 @@ progeny.SingleCellExperiment = function(expr, scale= FALSE, organism="Human",
   
   requireNamespace("SingleCellExperiment")
   
-  mat <- as.matrix(assay(input, assay_name))
+  mat <- as.matrix(assay(expr, assay_name))
   
   path_acts <- progeny(mat, scale=scale,
                        organism=organism, top=top, perm = perm, verbose = verbose,
@@ -122,7 +122,7 @@ progeny.SpatialExperiment = function(expr, scale=FALSE, organism="Human",
   
   requireNamespace("SpatialExperiment")
   
-  mat <- as.matrix(assay(input, assay_name))
+  mat <- as.matrix(assay(expr, assay_name))
   
   path_acts <- progeny(mat, scale=scale,
                        organism=organism, top=top, perm = perm, verbose = verbose,
